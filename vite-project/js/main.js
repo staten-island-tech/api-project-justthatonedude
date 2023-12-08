@@ -1,7 +1,7 @@
 import './style.css'
 import javascriptLogo from './javascript.svg'
 import viteLogo from '/vite.svg'
-import { setupCounter } from './APIProcess.js'
+import { setupCounter } from './GTFS_sort.js'
 
 document.querySelector('#app').innerHTML = `
   <div>
