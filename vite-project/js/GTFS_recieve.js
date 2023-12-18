@@ -1,6 +1,6 @@
 import GtfsRealtimeBindings from "gtfs-realtime-bindings";
 
-export const data = [];
+const data = [];
 const URLs = [
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs",
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-ace",
@@ -32,12 +32,20 @@ URLs.forEach(async (URL)=>{
     function FeedManagement(feed){
       feed.entity.forEach((entity)=>{
         const vehicle = entity.toJSON();
-        data.push(vehicle.vehicle);
+        data.push(entity);
+        
       })
-      console.log(data);
     };
     FeedManagement(feed);
+    function sortFeed(array){
+      /* const element = array.entity.forEach((obj)=>obj.id.sort((a,b)=>a-b));
+      console.log(element) */
+    }
+    sortFeed(data);
+    console.log(data)
 });
+
       
     
-      
+
+
