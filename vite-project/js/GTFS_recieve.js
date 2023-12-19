@@ -23,6 +23,7 @@ URLs.forEach(async (URL)=>{
   if (!response.ok) {
     const error = new Error(`${response.url}: ${response.status} ${response.statusText}`);
     error.response = response;
+    document.querySelector("h1").textContent = "The API is unresponive, please use https://mta.info for up-to-date info on train times."
     throw error;
   }
   const buffer = await response.arrayBuffer();
@@ -31,18 +32,18 @@ URLs.forEach(async (URL)=>{
   );
     function FeedManagement(feed){
       feed.entity.forEach((entity)=>{
-        const vehicle = entity.toJSON();
-        data.push(entity);
+        const vehicle = entity.toJSON()
+        data.push(vehicle);
         
       })
     };
     FeedManagement(feed);
     function sortFeed(array){
-      /* const element = array.entity.forEach((obj)=>obj.id.sort((a,b)=>a-b));
-      console.log(element) */
+      const feed = array.filter((el)=>el.hasOwnProperty("vehicle"))
+      const sort = feed.sort((a,b)=>a.vehicle.trip.routeId - b.vehicle.trip.routeId)
+      console.log(sort)
     }
     sortFeed(data);
-    console.log(data)
 });
 
       
