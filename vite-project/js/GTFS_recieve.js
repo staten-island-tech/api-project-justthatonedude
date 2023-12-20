@@ -1,6 +1,7 @@
 import GtfsRealtimeBindings from "gtfs-realtime-bindings";
-
+import '../css/style.css'
 const data = [];
+let output = [];
 const URLs = [
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs",
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-ace",
@@ -10,9 +11,27 @@ const URLs = [
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-nqrw",
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-jz",
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-si",
-]; 
+];
+document.querySelector('#app').innerHTML = (`
+<h1>Open Train Times</h1>
+<div class = "app">
+<form action="" id="form">
+    <label for="trainsearch">Search for Trains</label>
+    <input type="text" name="trainsearch" id="search"/>
+    <input type="submit" value="Click Here" />
+</form>
+<button id="theme">Theme Switch</button>
+</div>
 
-URLs.forEach(async (URL)=>{
+`);
+const DOMSelectors = {
+  searchQuery: document.querySelector("#search"),
+  form: document.querySelector("#form"),
+  theme: document.querySelector("#theme"),
+}
+DOMSelectors.form.addEventListener("submit", function(event){
+  event.preventDefault()
+  URLs.forEach(async (URL)=>{
   const response = await fetch(URL, {
     headers: {
       "x-api-key": "eMMdsAywmZ7Pv9XGupuHY8moCKfdCnkP2LeGCylI",
@@ -23,7 +42,7 @@ URLs.forEach(async (URL)=>{
   if (!response.ok) {
     const error = new Error(`${response.url}: ${response.status} ${response.statusText}`);
     error.response = response;
-    document.querySelector("h1").textContent = "The API is unresponive, please use https://mta.info for up-to-date info on train times."
+    document.querySelector("h2").textContent = "The API is unresponive, please use https://mta.info for up-to-date info on train times."
     throw error;
   }
   const buffer = await response.arrayBuffer();
@@ -38,15 +57,25 @@ URLs.forEach(async (URL)=>{
       })
     };
     FeedManagement(feed);
-    function sortFeed(array){
-      const feed = array.filter((el)=>el.hasOwnProperty("vehicle"))
-      const sort = feed.sort((a,b)=>a.vehicle.trip.routeId - b.vehicle.trip.routeId)
-      console.log(sort)
-    }
     sortFeed(data);
+})
+
+divCreator(output);
 });
 
-      
-    
+function sortFeed(array){
+  const userInput = DOMSelectors.searchQuery.value
+  const feed = array.filter((el)=>el.hasOwnProperty("vehicle"))
+  const filtered = feed.filter((el)=>el.vehicle.trip.routeId.includes(userInput))
+  const sort = filtered.filter((el)=>Object.values(el))
+  output.push(sort);
+  
+}
 
-
+function divCreator(array){
+  console.log(array)
+  array.forEach((obj)=>DOMSelectors.theme.insertAdjacentHTML(
+    "afterend",
+    `<div class=box><p id="firstNameoutput">${obj}</p><p id="lastNameoutput">${obj}</p></div>`
+  ))
+}
