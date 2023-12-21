@@ -1,7 +1,7 @@
 import GtfsRealtimeBindings from "gtfs-realtime-bindings";
 import '../css/style.css'
 const data = [];
-let output = [];
+const output = [];
 const URLs = [
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs",
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-ace",
@@ -53,13 +53,11 @@ DOMSelectors.form.addEventListener("submit", function(event){
       feed.entity.forEach((entity)=>{
         const vehicle = entity.toJSON()
         data.push(vehicle);
-        
       })
     };
     FeedManagement(feed);
     sortFeed(data);
 })
-
 divCreator(output);
 });
 
@@ -67,15 +65,19 @@ function sortFeed(array){
   const userInput = DOMSelectors.searchQuery.value
   const feed = array.filter((el)=>el.hasOwnProperty("vehicle"))
   const filtered = feed.filter((el)=>el.vehicle.trip.routeId.includes(userInput))
-  const sort = filtered.filter((el)=>Object.values(el))
-  output.push(sort);
+  filtered.filter((el)=>output.push(el.vehicle.trip))
   
 }
 
 function divCreator(array){
-  console.log(array)
-  array.forEach((obj)=>DOMSelectors.theme.insertAdjacentHTML(
+  const HTMLoutput = document.querySelectorAll("#output")
+  if (HTMLoutput !== undefined,HTMLoutput !== null){
+    HTMLoutput.forEach((obj)=>obj.remove())
+  }
+  array.forEach((obj)=>
+  
+  DOMSelectors.theme.insertAdjacentHTML(
     "afterend",
-    `<div class=box><p id="firstNameoutput">${obj}</p><p id="lastNameoutput">${obj}</p></div>`
+    `<div class=box><p id="output">${obj}</p></div>`
   ))
-}
+  };
