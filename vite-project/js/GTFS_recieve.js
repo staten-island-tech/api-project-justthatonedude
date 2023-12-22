@@ -12,9 +12,9 @@ const URLs = [
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-jz",
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-si",
 ];
-document.querySelector('#app').innerHTML = (`
+document.querySelector('body').innerHTML = (`
+<div id = "app">
 <h1>Open Train Times</h1>
-<div class = "app">
 <form action="" id="form">
     <label for="trainsearch">Search for Trains</label>
     <input type="text" name="trainsearch" id="search"/>
@@ -28,6 +28,7 @@ const DOMSelectors = {
   searchQuery: document.querySelector("#search"),
   form: document.querySelector("#form"),
   theme: document.querySelector("#theme"),
+  app: document.querySelector('#app')
 }
 DOMSelectors.form.addEventListener("submit", function(event){
   event.preventDefault()
@@ -65,7 +66,7 @@ function sortFeed(array){
   const userInput = DOMSelectors.searchQuery.value
   const feed = array.filter((el)=>el.hasOwnProperty("vehicle"))
   const filtered = feed.filter((el)=>el.vehicle.trip.routeId.includes(userInput))
-  filtered.filter((el)=>output.push(el.vehicle.trip))
+  filtered.filter((el)=>output.push(el.vehicle))
   
 }
 
@@ -74,10 +75,15 @@ function divCreator(array){
   if (HTMLoutput !== undefined,HTMLoutput !== null){
     HTMLoutput.forEach((obj)=>obj.remove())
   }
-  array.forEach((obj)=>
-  
-  DOMSelectors.theme.insertAdjacentHTML(
-    "afterend",
-    `<div class=box><p id="output">${obj}</p></div>`
-  ))
-  };
+
+  const output = array.forEach((obj)=>JSON.stringify(obj));
+  array.forEach((el)=>
+  DOMSelectors.app.insertAdjacentHTML(
+    "beforeend",
+    `<div class=flexbox>
+    <div class=card>
+    <p class="output">${JSON.stringify(el.trip)}</p>
+    <p class="output">${JSON.stringify(el)}</p>
+    </div></div>`
+  ));
+};

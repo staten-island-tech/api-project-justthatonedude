@@ -23,10 +23,9 @@ a:hover {
 }
 
 body {
-  margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
 }
 
@@ -34,14 +33,21 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+p {
+  text-wrap: wrap;
 }
-
+#app {
+  flex-wrap: wrap;
+  margin: 1rem auto;
+  z-index: 1;
+}
+#flexbox{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1rem auto;
+  justify-content: space-around;
+  z-index: 1;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -56,7 +62,14 @@ h1 {
 }
 
 .card {
-  padding: 2em;
+  position: relative;
+  width: 20rem;
+  height: 50%;
+  background: #471268;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  color: #f9f9f9;
+  
 }
 
 .read-the-docs {
