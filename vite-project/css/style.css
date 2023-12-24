@@ -24,6 +24,7 @@ a:hover {
 
 body {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
@@ -66,10 +67,12 @@ p {
   width: 20rem;
   height: 50%;
   background: #471268;
+  border: 0.25rem solid;
+  border-color: #f5f5f5;
   border-radius: 1.25rem;
   overflow: hidden;
   color: #f9f9f9;
-  
+  margin: 1rem auto;
 }
 
 .read-the-docs {

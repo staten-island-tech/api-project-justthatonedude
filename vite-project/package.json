@@ -12,6 +12,7 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
-    "gtfs-realtime-bindings": "^1.1.1"
+    "gtfs-realtime-bindings": "^1.1.1",
+    "node": "^21.2.0"
   }
 }
