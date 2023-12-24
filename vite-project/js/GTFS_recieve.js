@@ -12,6 +12,37 @@ const URLs = [
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-jz",
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-si",
 ];
+function APICall() {
+  URLs.forEach(async (URL) => {
+    const response = await fetch(URL, {
+      headers: {
+        "x-api-key": "eMMdsAywmZ7Pv9XGupuHY8moCKfdCnkP2LeGCylI",
+        // replace with your GTFS-realtime source's auth token
+        // e.g. x-api-key is the header value used for NY's MTA GTFS APIs
+      },
+    });
+    if (!response.ok) {
+      const error = new Error(`${response.url}: ${response.status} ${response.statusText}`);
+      error.response = response;
+      document.querySelector("h2").textContent = "The API is unresponsive, please use https://mta.info for up-to-date info on train times."
+      throw error;
+    }
+    const buffer = await response.arrayBuffer();
+    const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(
+      new Uint8Array(buffer)
+    );
+    function FeedManagement(feed){
+      feed.entity.forEach((entity)=>{
+        const vehicle = entity.toJSON()
+        data.push(vehicle);
+      })
+    };
+    FeedManagement(feed);
+  });
+
+  // Add any additional code you want to run after the API call here
+};
+APICall();
 document.querySelector('body').innerHTML = (`
 <div id = "app">
 <h1>Open Train Tracking</h1>
@@ -30,6 +61,7 @@ document.querySelector('body').innerHTML = (`
 
 <div id = "flexbox"></div>
 `);
+
 const DOMSelectors = {
   body: document.querySelector("body"),
   searchQuery: document.querySelector("#search"),
@@ -39,9 +71,9 @@ const DOMSelectors = {
   flex: document.querySelector('#flexbox'),
   clearCards: document.querySelector('#clear-trips')
 }
+
 DOMSelectors.form.addEventListener("submit", function(event){
   event.preventDefault()
-  APICall(); 
   sortFeed(data,output);
   divCreator(output);
   function sortFeed(array,output){
@@ -85,36 +117,6 @@ function errorHandling(output){
     );
   };
 }
-  function APICall() {
-    URLs.forEach(async (URL) => {
-      const response = await fetch(URL, {
-        headers: {
-          "x-api-key": "eMMdsAywmZ7Pv9XGupuHY8moCKfdCnkP2LeGCylI",
-          // replace with your GTFS-realtime source's auth token
-          // e.g. x-api-key is the header value used for NY's MTA GTFS APIs
-        },
-      });
-      if (!response.ok) {
-        const error = new Error(`${response.url}: ${response.status} ${response.statusText}`);
-        error.response = response;
-        document.querySelector("h2").textContent = "The API is unresponsive, please use https://mta.info for up-to-date info on train times."
-        throw error;
-      }
-      const buffer = await response.arrayBuffer();
-      const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(
-        new Uint8Array(buffer)
-      );
-      function FeedManagement(feed){
-        feed.entity.forEach((entity)=>{
-          const vehicle = entity.toJSON()
-          data.push(vehicle);
-        })
-      };
-      FeedManagement(feed);
-    });
-  
-    // Add any additional code you want to run after the API call here
-  };
   errorHandling(output); 
 });
 
