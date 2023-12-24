@@ -24,13 +24,14 @@ document.querySelector('body').innerHTML = (`
 <h2 class="infotext">Some notes:</h2>
 <p class="infotext">1. Understand that the some routes are abbreivated or named differently from common knowledge.</p>
 <p class="infotext">2. These routes are the Staten Island Railway (SI in the API), Franklin Ave Shuttle (FS), and Rockaway Park Shuttle. (H)</p>
-<p class="infotext">3. Some routes do not run on certain occasions, such as weekends, which means do check the MTA's schedules before using</p>
+<p class="infotext">3. Some routes do not run on certain occasions, such as weekends, which means do check the MTA's schedules before using this.</p>
 </div>
 
 
 <div id = "flexbox"></div>
 `);
 const DOMSelectors = {
+  body: document.querySelector("body"),
   searchQuery: document.querySelector("#search"),
   form: document.querySelector("#form"),
   userInput: document.querySelector("#search"),
