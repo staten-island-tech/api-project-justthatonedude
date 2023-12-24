@@ -14,7 +14,7 @@ const URLs = [
 ];
 document.querySelector('body').innerHTML = (`
 <div id = "app">
-<h1>Open Train Times</h1>
+<h1>Open Train Tracking</h1>
 <form action="" id="form">
     <label for="trainsearch">Search for Trains</label>
     <input type="text" name="trainsearch" id="search"/>
@@ -66,6 +66,7 @@ function divCreator(array){
     <p class="output">${"StopID: " + el.vehicle.stopId}</p>
     <p class="output">${"Stop Sequence Number: " + el.vehicle.currentStopSequence.toString()}</p>
     <p class="output">${"StartTime: " + el.vehicle.trip.startTime}</p>
+    <p class="output">${"Direction: " + el.vehicle.stopId[3]}</p>
     </div>`
   ));
   DOMSelectors.userInput.innerHTML = "";
