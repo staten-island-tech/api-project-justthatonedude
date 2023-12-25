@@ -56,6 +56,7 @@ document.querySelector('body').innerHTML = (`
 <p class="infotext">1. Understand that the some routes are abbreivated or named differently from common knowledge.</p>
 <p class="infotext">2. These routes are the Staten Island Railway (SI in the API), Franklin Ave Shuttle (FS), and Rockaway Park Shuttle. (H)</p>
 <p class="infotext">3. Some routes do not run on certain occasions, such as weekends, which means do check the MTA's schedules before using this.</p>
+<p class="infotext">4. For random trip data, leave blank and enter.</p>
 </div>
 
 
