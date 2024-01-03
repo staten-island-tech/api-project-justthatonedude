@@ -22,10 +22,10 @@ document.querySelector('body').innerHTML = (`
 </form>
 <button id = "clear-trips">Clear Trips</button>
 <h2 class="infotext">Some notes:</h2>
-<ol class="infotext">1. Understand that the some routes are abbreivated or named differently from common knowledge.</ol>
-<ol class="infotext">2. These routes are the Staten Island Railway (SI in the API), Franklin Ave Shuttle (FS), and Rockaway Park Shuttle. (H)</ol>
-<ol class="infotext">3. Some routes do not run on certain occasions, such as weekends, which means do check the MTA's schedules before using this.</ol>
-<ol class="infotext">4. For random trip data, leave blank and enter.</ol>
+<ol>
+<li class="infotext">Understand that the some routes are abbreivated or named differently from common knowledge.</li>
+<li class="infotext">These routes are the Staten Island Railway (SI in the API), Franklin Ave Shuttle (FS), and Rockaway Park Shuttle. (H)</li>
+<li class="infotext">Some routes do not run on certain occasions, such as weekends, which means do check the MTA's schedules before using this.</li></ol>
 </div>
 
 
