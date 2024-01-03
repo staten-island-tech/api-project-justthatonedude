@@ -12,6 +12,25 @@ const URLs = [
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-jz",
    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-si",
 ];
+document.querySelector('body').innerHTML = (`
+<div id = "app">
+<h1>Open Train Tracking</h1>
+<form action="" id="form">
+    <label for="search">Search for Trains</label>
+    <input type="text" name="search" id="search"/>
+    <input type="submit" value="Click Here" />
+</form>
+<button id = "clear-trips">Clear Trips</button>
+<h2 class="infotext">Some notes:</h2>
+<ol class="infotext">1. Understand that the some routes are abbreivated or named differently from common knowledge.</ol>
+<ol class="infotext">2. These routes are the Staten Island Railway (SI in the API), Franklin Ave Shuttle (FS), and Rockaway Park Shuttle. (H)</ol>
+<ol class="infotext">3. Some routes do not run on certain occasions, such as weekends, which means do check the MTA's schedules before using this.</ol>
+<ol class="infotext">4. For random trip data, leave blank and enter.</ol>
+</div>
+
+
+<div id = "flexbox"></div>
+`);
 function APICall() {
   URLs.forEach(async (URL) => {
     const response = await fetch(URL, {
@@ -38,31 +57,20 @@ function APICall() {
       })
     };
     FeedManagement(feed);
+    function FeedLoad(array,output){
+      if (output.length !== 0){
+        output.length = 0;
+      }
+      const feed = array.filter((el)=>el.hasOwnProperty("vehicle"))
+      feed.filter((el)=>output.push(el))
+    }
+    FeedLoad(data,output);
+    divCreator(output);
   });
 
   // Add any additional code you want to run after the API call here
 };
 APICall();
-document.querySelector('body').innerHTML = (`
-<div id = "app">
-<h1>Open Train Tracking</h1>
-<form action="" id="form">
-    <label for="trainsearch">Search for Trains</label>
-    <input type="text" name="trainsearch" id="search"/>
-    <input type="submit" value="Click Here" />
-</form>
-<button id = "clear-trips">Clear Trips</button>
-<h2 class="infotext">Some notes:</h2>
-<p class="infotext">1. Understand that the some routes are abbreivated or named differently from common knowledge.</p>
-<p class="infotext">2. These routes are the Staten Island Railway (SI in the API), Franklin Ave Shuttle (FS), and Rockaway Park Shuttle. (H)</p>
-<p class="infotext">3. Some routes do not run on certain occasions, such as weekends, which means do check the MTA's schedules before using this.</p>
-<p class="infotext">4. For random trip data, leave blank and enter.</p>
-</div>
-
-
-<div id = "flexbox"></div>
-`);
-
 const DOMSelectors = {
   body: document.querySelector("body"),
   searchQuery: document.querySelector("#search"),
@@ -72,22 +80,6 @@ const DOMSelectors = {
   flex: document.querySelector('#flexbox'),
   clearCards: document.querySelector('#clear-trips')
 }
-
-DOMSelectors.form.addEventListener("submit", function(event){
-  event.preventDefault()
-  sortFeed(data,output);
-  divCreator(output);
-  function sortFeed(array,output){
-  if (output.length !== 0){
-    output.length = 0;
-  }
-  const userInput = DOMSelectors.searchQuery.value;
-  const feed = array.filter((el)=>el.hasOwnProperty("vehicle"))
-  const filtered = feed.filter((el)=>el.vehicle.trip.routeId.includes(userInput.toUpperCase()))
-  filtered.filter((el)=>output.push(el))
-  
-}
-
 function divCreator(array){
   array.forEach((el)=>
   DOMSelectors.flex.insertAdjacentHTML(
@@ -104,6 +96,21 @@ function divCreator(array){
   ));
   DOMSelectors.userInput.innerHTML = "";
 };
+DOMSelectors.form.addEventListener("submit", function(event){
+  event.preventDefault()
+  sortFeed(data,output);
+  divCreator(output);
+  function sortFeed(array,output){
+  if (output.length !== 0){
+    output.length = 0;
+  }
+  const userInput = DOMSelectors.searchQuery.value;
+  const feed = array.filter((el)=>el.hasOwnProperty("vehicle"))
+  const filtered = feed.filter((el)=>el.vehicle.trip.routeId.includes(userInput.toUpperCase()))
+  filtered.filter((el)=>output.push(el))
+  
+}
+
 function errorHandling(output){
   if (output.length === 0){
     DOMSelectors.flex.insertAdjacentHTML(
