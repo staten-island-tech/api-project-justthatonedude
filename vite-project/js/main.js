@@ -3,14 +3,14 @@ import '../css/style.css'
 const data = [];
 const output = [];
 const URLs = [
-   "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs",
-   "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-ace",
-   "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-bdfm",
-   "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-g",
-   "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-l",
-   "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-nqrw",
-   "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-jz",
-   "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-si",
+  "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs",
+  "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-ace",
+  "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-bdfm",
+  "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-g",
+  "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-l",
+  "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-nqrw",
+  "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-jz",
+  "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-si",
 ];
 document.querySelector('body').innerHTML = (`
 <div id = "app">
@@ -50,25 +50,23 @@ function APICall() {
     const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(
       new Uint8Array(buffer)
     );
-    function FeedManagement(feed){
-      feed.entity.forEach((entity)=>{
+    function FeedManagement(feed) {
+      feed.entity.forEach((entity) => {
         const vehicle = entity.toJSON()
         data.push(vehicle);
       })
     };
     FeedManagement(feed);
-    function FeedLoad(array,output){
-      if (output.length !== 0){
+    function FeedLoad(array, output) {
+      if (output.length !== 0) {
         output.length = 0;
       }
-      const feed = array.filter((el)=>el.hasOwnProperty("vehicle"))
-      feed.filter((el)=>output.push(el))
+      const feed = array.filter((el) => el.hasOwnProperty("vehicle"))
+      feed.filter((el) => output.push(el))
     }
-    FeedLoad(data,output);
+    FeedLoad(data, output);
     divCreator(output);
   });
-
-  // Add any additional code you want to run after the API call here
 };
 APICall();
 const DOMSelectors = {
@@ -80,11 +78,11 @@ const DOMSelectors = {
   flex: document.querySelector('#flexbox'),
   clearCards: document.querySelector('#clear-trips')
 }
-function divCreator(array){
-  array.forEach((el)=>
-  DOMSelectors.flex.insertAdjacentHTML(
-    "afterbegin",
-    `
+function divCreator(array) {
+  array.forEach((el) =>
+    DOMSelectors.flex.insertAdjacentHTML(
+      "afterbegin",
+      `
     <div class=card>
     <p class="output">${"TripID: " + el.id}</p>
     <p class="output">${"Route: " + el.vehicle.trip.routeId}</p>
@@ -93,46 +91,46 @@ function divCreator(array){
     <p class="output">${"StartTime: " + el.vehicle.trip.startTime}</p>
     <p class="output">${"Direction: " + el.vehicle.stopId[3]}</p>
     </div>`
-  ));
+    ));
   DOMSelectors.userInput.innerHTML = "";
 };
-DOMSelectors.form.addEventListener("submit", function(event){
+DOMSelectors.form.addEventListener("submit", function (event) {
   event.preventDefault()
-  sortFeed(data,output);
+  sortFeed(data, output);
   divCreator(output);
-  function sortFeed(array,output){
-  if (output.length !== 0){
-    output.length = 0;
-  }
-  const userInput = DOMSelectors.searchQuery.value;
-  const feed = array.filter((el)=>el.hasOwnProperty("vehicle"))
-  const filtered = feed.filter((el)=>el.vehicle.trip.routeId.includes(userInput.toUpperCase()))
-  filtered.filter((el)=>output.push(el))
-  
-}
+  function sortFeed(array, output) {
+    if (output.length !== 0) {
+      output.length = 0;
+    }
+    const userInput = DOMSelectors.searchQuery.value;
+    const feed = array.filter((el) => el.hasOwnProperty("vehicle"))
+    const filtered = feed.filter((el) => el.vehicle.trip.routeId.includes(userInput.toUpperCase()))
+    filtered.filter((el) => output.push(el))
 
-function errorHandling(output){
-  if (output.length === 0){
-    DOMSelectors.flex.insertAdjacentHTML(
-      "afterbegin",
-      `
+  }
+
+  function errorHandling(output) {
+    if (output.length === 0) {
+      DOMSelectors.flex.insertAdjacentHTML(
+        "afterbegin",
+        `
       <div class=card>
       <p class="output">"Your search has failed most likely one of 3 reasons."</p>
       <p class="output">"Reason 1: Your search query was invalid. Make sure to type a valid route letter."</p>
       <p class="output">"Reason 2: The API is down for some reason. Please check mta.info for more information on API problems."</p>
       <p class="output">"Reason 3: Some routes do not run on weekends such as the B and W. There is no data on these routes because there are no trains."</p>
       </div>`
-    );
-  };
-}
-  errorHandling(output); 
+      );
+    };
+  }
+  errorHandling(output);
 });
 
 
-function clearCards(){
-DOMSelectors.clearCards.addEventListener("click", function(event){
-  const cards = document.querySelectorAll(".card")
-  cards.forEach((el)=>el.remove());
-});
+function clearCards() {
+  DOMSelectors.clearCards.addEventListener("click", function (event) {
+    const cards = document.querySelectorAll(".card")
+    cards.forEach((el) => el.remove());
+  });
 };
 clearCards()
